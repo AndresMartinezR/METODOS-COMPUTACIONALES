@@ -1,3 +1,10 @@
+"""
+Este codigo aplica el metodo de Flujo de carga DC para un sistema de terminado, a partir de sus datos de linea y datos nodales
+
+Autor: Andres Felipe Martinez Rodriguez  
+ID: 1110592058  
+"""
+
 using Pkg
 using LinearAlgebra
 using DataFrames
