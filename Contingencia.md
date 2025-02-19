@@ -101,6 +101,5 @@ resultados_flujos, resultados_angulos = analisis_contingencias(lines, nodes)
 Hecho por: **Andrés Felipe Martínez**  
 Email: **felipe.martinez1@utp.edu.co**  
 
-Este código es de uso libre para fines académicos y de investigación.
 
 ---
