@@ -4,7 +4,7 @@ Este código evalúa el impacto de la pérdida de líneas de transmisión en la 
 calculando los flujos de potencia en cada contingencia.  
 
 Autor: Andres Felipe Martinez Rodriguez  
-ID: 1110592058  
+CC: 1110592058  
 """
 
 # Importación de librerías necesarias
