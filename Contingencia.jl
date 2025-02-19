@@ -143,14 +143,11 @@ Función para graficar diagramas de caja y bigotes para los flujos de potencia
 y los ángulos en cada contingencia analizada.
 """
 function graficar_cajas_bigotes(flujos, angulos)
+    
     num_contingencias = length(flujos)  # Número total de contingencias
 
     # Etiquetas para el eje X
     labels = ["Cont. $i" for i in 1:num_contingencias]
-
-    # Se define el espaciado en el eje X
-    xticks_labels = 1:5:num_contingencias
-    xticks_pos = collect(xticks_labels)
 
     # Gráfica de flujos de potencia
     grafica1 = boxplot(flujos, labels=labels, title="Distribución de Flujos por Contingencia",
@@ -162,18 +159,6 @@ function graficar_cajas_bigotes(flujos, angulos)
             ylabel="Ángulo (rad)", xlabel="Contingencia", legend=false, xticks=(1:10:num_contingencias))
     display(grafica2)
 end
-
-# Leer el archivo CSV en un DataFrame
-df = CSV.File("lines.csv") |> DataFrame
-
-# Supongamos que quieres eliminar la fila con índice 5 (la sexta fila, ya que Julia usa indexación basada en 1)
-fila_a_eliminar = 2
-
-# Filtrar el DataFrame para excluir la fila deseada
-df_filtrado = df[1:end .!= fila_a_eliminar, :]
-
-# Escribir el DataFrame filtrado de nuevo en un archivo CSV
-CSV.write("lines_filtrado.csv", df_filtrado)
 
 # Función principal
 # Cargar los datos de líneas y nodos
