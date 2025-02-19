@@ -73,5 +73,4 @@ Ybus = calcular_ybus(lines, nodes)
 **Licencia**
 Hecho por: **Andrés Felipe Martínez**  
 Email: **felipe.martinez1@utp.edu.co**  
-Proceso guiado por el docente en el curso de Sistemas de Potencia.
 
