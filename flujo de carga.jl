@@ -38,9 +38,64 @@ function calcular_ybus(lines, nodes)
         Ybus[n2, n1] -= yL  # Elemento fuera de la diagonal (acoplamiento entre nodos)
         Ybus[n2, n2] += yL + Bs  # Elemento diagonal del nodo de recepción
     end
-    
+
+    #nodo_referencia = 1  # Se toma el nodo 1 como referencia
+    # Se elimina la fila y columna del nodo de referencia para obtener B reducida
+    #Ybus_reducida = Ybus[1:end .!= nodo_referencia, 1:end .!= nodo_referencia]
     return Ybus  # Retorno de la matriz Ybus calculada
 end
+
+
+function Punto_fijo(linesm, nodes, Ybus)
+
+    numero_lineas = nrow(linesm)
+    numero_nodes = nrow(nodes)
+
+    #Extraer primera columna de matriz Ybus, YNS
+    Yns = Ybus[:,1]
+
+    # Reducir Matriz Ybus YNN
+    nodo_referencia = 1  # Se toma el nodo 1 como referencia
+    # Se elimina la fila y columna del nodo de referencia para obtener B reducida
+    Ynn = Ybus[1:end .!= nodo_referencia, 1:end .!= nodo_referencia]
+
+    #Potenicas inyectadas 
+    Sn = zeros(numero_nodes)
+    for i =1: numero_lineas
+        
+        #Potencia 
+        Pgenerada = nodes.PGEN[i]
+        Pdemandada = nodes.PLOAD[i]
+        Qgenerada =nodes.QGEN[i]
+        Qdemandada = nodes.QLOAD[i]
+
+        Ptotal = Pgenerada - Pdemandada
+        Qtotal = Qgenerada - Qdemandada
+
+        Sn[i]= sqrt(Ptotal^2 +Qtotal^2)
+    end
+
+    print("Sn:", Sn)
+
+    #Inicializar Vn
+    # Crear un vector de voltajes con 'n' elementos, todos inicializados a 1 con ángulo 0
+    Vn = zeros(numero_nodes)*(1*im)
+
+    #Voltaje Slack
+    Vs = 1
+    Vector_V = zeros(numero_nodes)*(1+0im)
+    #Punto fijo iteracion = 10
+    for k=1:10
+        T = Ynn\(conj.(Sn/Vn)- Yns*Vs)
+
+        Vector_V[k] = T
+
+    end
+
+    return Vector_V
+
+end
+
 
 
 
@@ -68,23 +123,13 @@ else
     println("Las columnas 'FROM' y 'TO' no existen en el archivo 'lines.csv'.")
 end
 
-# Procesar la columna de nodos en nodes (asumiendo que la columna se llama "NODE")
-if :NODE in propertynames(nodes)
-    # Aplicar la función a la columna NODE
-    nodes.NODE = remove_n.(nodes.NODE)
-
-    # Opcional: Convertir la columna a tipo numérico (Int)
-    nodes.NODE = parse.(Int, nodes.NODE)
-
-    # Guardar el archivo CSV modificado
-    CSV.write("nodes_modified.csv", nodes)
-    println("Archivo 'nodes_modified.csv' guardado correctamente.")
-else
-    println("La columna 'NODE' no existe en el archivo 'nodes.csv'.")
-end
 
 # Cargar los archivos modificados
 linesm = DataFrame(CSV.File("lines_modified.csv"))
 
 # Calcular Ybus (asumiendo que tienes una función llamada `calcular_ybus`)
 Ybus = calcular_ybus(linesm, nodes)
+
+
+punto = Punto_fijo(linesm, nodes, Ybus)
+print("Punto fijo ",punto)
