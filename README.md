@@ -1,49 +1,54 @@
-# Métodos Computacionales para Sistemas Eléctricos de Potencia  
+# **Métodos Computacionales para Sistemas Eléctricos de Potencia**  
 
-## **Descripción del Proyecto**  
-Este repositorio contiene diversos análisis relacionados con problemas en sistemas eléctricos de potencia. Se estudian diferentes metodologías para evaluar el comportamiento de la red en distintos escenarios, tales como:  
+##  **Descripción del Proyecto**  
+Este repositorio contiene análisis avanzados sobre problemas en **sistemas eléctricos de potencia**, aplicando metodologías computacionales para evaluar el comportamiento de la red en distintos escenarios.  
 
-- **Flujo de carga en condiciones normales y de contingencia (N-1):** Evaluación de cómo funciona la red cuando se desconecta una línea.  
-- **Análisis de sensibilidad lineal:** Determinación de cómo afecta la inyección de generación en un nodo a ciertas líneas del sistema.  
-- **Flujo cuasi-estático y cuasi-dinámico:** Evaluación de los voltajes bajo demanda variable por minuto y generación solar intermitente, analizando el comportamiento de los voltajes en 1440 flujos de carga diarios.  
-- **Pérdidas del sistema y generación slack:** Cálculo de la energía que debe suplir el nodo slack en cada instante de tiempo debido a la variabilidad en la generación y la demanda.  
+###  **Principales Estudios**  
+- **Flujo de carga en condiciones normales y de contingencia (N-1):** Análisis del desempeño de la red ante la desconexión de una línea.  
+- **Análisis de sensibilidad lineal:** Evaluación del impacto de cambios en la generación sobre determinadas líneas del sistema.  
+- **Flujo cuasi-estático y cuasi-dinámico:** Estudio de voltajes bajo demanda variable y generación solar intermitente, con simulaciones de hasta **1440 flujos de carga diarios**.  
+- **Pérdidas del sistema y generación slack:** Cálculo de la energía que debe suplir el nodo slack en función de la variabilidad de la demanda y generación.  
 
-Para estos estudios, se utilizan bases de datos proporcionadas por el tutor y operadores de red en distintas regiones del mundo (incluyendo Inglaterra). Debido a la confidencialidad de los datos en Colombia, no se cuenta con bases de datos locales.  
-
----
-
-## **Introducción**  
-Los sistemas eléctricos de potencia desempeñan un papel fundamental en la operación y estabilidad de la red eléctrica. La necesidad de optimizar la generación, transmisión y distribución de la energía ha impulsado el desarrollo de herramientas computacionales avanzadas para el análisis y solución de problemas en estos sistemas.  
-
-Este proyecto tiene como objetivo implementar diferentes métodos computacionales en el estudio de sistemas eléctricos de potencia, utilizando herramientas de programación como **Julia**. A través de este enfoque, se busca mejorar la eficiencia en el análisis de flujos de carga, estudios de sensibilidad, evaluación de pérdidas y simulaciones de generación y demanda dinámicas.  
-
-El lenguaje de programación **Julia** ha sido seleccionado debido a su alto rendimiento y facilidad de uso en comparación con otros lenguajes como Python y MATLAB. Su velocidad de compilación y ejecución lo convierten en una opción ideal para simulaciones y cálculos intensivos en el ámbito de la ingeniería eléctrica.  
+Los estudios se basan en **bases de datos proporcionadas por tutores y operadores de red** en diversas regiones del mundo, incluyendo **Inglaterra**. En Colombia, la falta de acceso a datos públicos impide su inclusión en este análisis.  
 
 ---
 
-## **Estructura del Repositorio**  
-**Carpetas del Proyecto**  
-Cada carpeta contiene un análisis diferente dentro del amplio campo de la ingeniería eléctrica.  
+##  **Introducción**  
+Los **sistemas eléctricos de potencia** son esenciales para la operación y estabilidad de la red. La creciente complejidad de la generación, transmisión y distribución de energía requiere herramientas computacionales avanzadas para optimizar su desempeño.  
 
-- `Flujo_DC/` → Análisis de flujo de carga en corriente continua.  
-- `Sensibilidad/` → Estudio de sensibilidad de la red.  
-- `Flujo_CuasiEstatico/` → Análisis de carga considerando generación solar variable.  
-- `Estudio_Conexion/` → Evaluación de la conexión de un panel solar según la normativa de la comisión reguladora.  
+Este proyecto explora distintos **métodos computacionales** para el análisis de sistemas eléctricos, con especial enfoque en **Julia** debido a su alto rendimiento en cálculos intensivos y su sintaxis optimizada para simulaciones complejas.  
+
+ **¿Por qué Julia?**  
+- Mayor velocidad de ejecución que Python y MATLAB.  
+- Excelente manejo de cálculos matriciales y numéricos.  
+- Optimizado para simulaciones en ingeniería eléctrica.  
 
 ---
 
-## **Requisitos y Tecnologías Utilizadas**  
-**Lenguajes y herramientas:**  
-- **Julia:** Lenguaje de programación de alto rendimiento con una sintaxis amigable.  
-- **Paquetes de Julia:**  
-  - CSV.jl  
-  - DataFrames.jl  
+##  **Estructura del Repositorio**  
+Cada carpeta contiene un análisis específico dentro del campo de la ingeniería eléctrica:  
+
+📂 `Flujo_DC/` → Análisis de flujo de carga en corriente continua.  
+📂 `Sensibilidad/` → Evaluación de sensibilidad de la red.  
+📂 `Flujo_CuasiEstatico/` → Análisis de voltajes considerando generación solar variable.  
+📂 `Estudio_Conexion/` → Evaluación de la conexión de paneles solares según normativas regulatorias.  
+
+---
+
+##  **Lenguajes y Herramientas**  
+- **Lenguaje:** Julia  
+- **Principales paquetes de Julia:**  
+  - `CSV.jl` → Manejo de archivos CSV.  
+  - `DataFrames.jl` → Procesamiento y análisis de datos tabulares.  
 - **Formatos de datos:** `.csv`  
 
 ---
 
-## **Licencia y Contacto**  
-📌 **Hecho por:** Andrés Felipe Martínez  
-📧 **Email:** felipe.martinez1@utp.edu.co  
+##  **Licencia**  
+Este proyecto se distribuye bajo la licencia **MIT**, permitiendo su uso, modificación y distribución con atribución adecuada.  
+
+## **Contacto**  
+👤 **Autor:** Andrés Felipe Martínez  
+
 
 
