@@ -2,7 +2,6 @@
 Este codigo aplica el metodo de Flujo de carga DC para un sistema de terminado, a partir de sus datos de linea y datos nodales
 
 Autor: Andres Felipe Martinez Rodriguez  
-ID: 1110592058  
 """
 
 using Pkg
@@ -10,8 +9,17 @@ using LinearAlgebra
 using DataFrames
 using CSV
 
-"""Se crean funcion de matriz de susceptancia independiente"""
 function Susceptancia(lines, nodes)
+    """Se crean funcion de matriz de susceptancia independiente
+    Entradas:
+    -lines::DataFrame: DataFrame con información de las líneas de transmisión
+    -nodes::DataFrame: DataFrame con información de los nodos.
+
+    Salida:
+    -B_reducida::Matrix{Float64}: Matriz de susceptancia reducida del sistema sin el nodo de referencia. Esta matriz es de dimensión (n-1) 
+    x (n-1), donde n es el número total de nodos y el nodo de referencia (usualmente el nodo 1) se elimina.
+    """
+
     numero_lineas = nrow(lines)  # Número total de líneas
     numero_nodos = nrow(nodes)   # Número total de nodos
 
@@ -37,11 +45,19 @@ function Susceptancia(lines, nodes)
     return B_reducida
 end
 
-"""
-Función para calcular el vector de potencias inyectadas en cada nodo del sistema.  
-Se obtiene como la diferencia entre la generación de potencia y la carga en cada nodo.
-"""
+
 function Potencias_iny(nodes)
+
+    """
+    Función para calcular el vector de potencias inyectadas en cada nodo del sistema.  
+    Se obtiene como la diferencia entre la generación de potencia y la carga en cada nodo.
+
+    Entradas:
+    -nodes::DataFrame: DataFrame con información de los nodos.
+
+    Salida: 
+    - Vector de potencias inyectadas
+    """
     cantidad_nodos = nrow(nodes)  # Número total de nodos
     Potencias_iny = zeros(cantidad_nodos)  # Vector de potencias inicializado en ceros
     
@@ -56,21 +72,38 @@ function Potencias_iny(nodes)
     return P_reducido
 end
 
-"""
-Función para calcular el vector de ángulos de fase en los nodos del sistema  
-utilizando la matriz de susceptancia reducida y el vector de potencias inyectadas.
-"""
+
 function vector_angulos(B, P)
+     """
+    Función para calcular el vector de ángulos de fase en los nodos del sistema  
+    utilizando la matriz de susceptancia reducida y el vector de potencias inyectadas.
+    
+    Entrada:
+    - B::Matrix{Float64}: Matriz de susceptancia reducida.
+    - P::Vector{Float64}: Vector de potencias inyectadas.
+    Salida:
+    - vector_angulos::Vector{Float64}: Vector de ángulos nodales (con nodo de referencia).
+    """
     vector_angulos = pinv(B) * P  # Resolviendo el sistema de ecuaciones B * θ = P
     insert!(vector_angulos, 1, 0.0)  # Se agrega el nodo de referencia con ángulo 0
     return vector_angulos
 end
 
-"""
-Función para calcular los flujos de potencia en cada línea del sistema  
-usando el modelo de flujo de potencia DC.
-"""
+
 function flujo_dc(lines, nodes, c)
+     """
+    Función para calcular los flujos de potencia en cada línea del sistema  
+    usando el modelo de flujo de potencia DC.
+
+    Entradas:
+    - lines: DataFrame con los datos de las líneas de transmisión.
+    - nodes: DataFrame con los datos de los nodos.
+    - vector_ang::Vector{Float64}: Vector de ángulos nodales.
+    
+    Salida:
+    - P_flujos::Vector{Float64}: Vector con los flujos de potencia por línea.
+
+    """
     num_nodos = nrow(nodes)  # Número total de nodos
     num_lineas = nrow(lines)  # Número total de líneas
     P_flujos = zeros(num_lineas)  # Vector para almacenar los flujos calculados
