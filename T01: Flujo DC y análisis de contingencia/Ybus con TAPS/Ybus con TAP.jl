@@ -2,7 +2,6 @@
 Cálculo de la matriz de admitancia nodal Ybus considerando transformadores con taps.
 
 Nombre: Andres Felipe Martinez Rodriguez
-CC: 1110592058
 """
 
 using Pkg
