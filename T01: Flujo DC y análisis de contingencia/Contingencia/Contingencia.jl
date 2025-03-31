@@ -13,11 +13,19 @@ using LinearAlgebra # Operaciones con matrices y álgebra lineal
 using DataFrames   # Manipulación de datos en formato tabular
 using CSV          # Lectura y escritura de archivos CSV
 
-"""
-Función para calcular la matriz de susceptancia B del sistema.  
-Se obtiene a partir de los datos de las líneas de transmisión y los nodos del sistema.
-"""
+
 function Susceptancia(lines, nodes)
+    """
+    Función para calcular la matriz de susceptancia B del sistema.  
+    Se obtiene a partir de los datos de las líneas de transmisión y los nodos del sistema.
+    
+    Entradas:
+    - lines: DataFrame con los datos de las líneas de transmisión.
+    - nodes: DataFrame con los datos de los nodos del sistema.
+    
+    Salida:
+    - B_reducida::Matrix{Float64}: Matriz de susceptancia reducida (sin el nodo de referencia)
+    """
     numero_lineas = nrow(lines)  # Número total de líneas
     numero_nodos = nrow(nodes)   # Número total de nodos
 
@@ -43,11 +51,17 @@ function Susceptancia(lines, nodes)
     return B_reducida
 end
 
-"""
-Función para calcular el vector de potencias inyectadas en cada nodo del sistema.  
-Se obtiene como la diferencia entre la generación de potencia y la carga en cada nodo.
-"""
+
 function Potencias_iny(nodes)
+    """
+    Función para calcular el vector de potencias inyectadas en cada nodo del sistema.  
+    Se obtiene como la diferencia entre la generación de potencia y la carga en cada nodo.
+    Entradas:
+    - nodes: DataFrame con los datos de los nodos.
+    
+    Salida:
+    - P_reducido::Vector{Float64}: Vector de potencias inyectadas (sin el nodo de referencia).
+    """
     cantidad_nodos = nrow(nodes)  # Número total de nodos
     Potencias_iny = zeros(cantidad_nodos)  # Vector de potencias inicializado en ceros
     
@@ -62,21 +76,38 @@ function Potencias_iny(nodes)
     return P_reducido
 end
 
-"""
-Función para calcular el vector de ángulos de fase en los nodos del sistema  
-utilizando la matriz de susceptancia reducida y el vector de potencias inyectadas.
-"""
+
 function vector_angulos(B, P)
+    """
+    Función para calcular el vector de ángulos de fase en los nodos del sistema  
+    utilizando la matriz de susceptancia reducida y el vector de potencias inyectadas.
+    
+    Entrada:
+    - B::Matrix{Float64}: Matriz de susceptancia reducida.
+    - P::Vector{Float64}: Vector de potencias inyectadas.
+    Salida:
+    - vector_angulos::Vector{Float64}: Vector de ángulos nodales (con nodo de referencia).
+    """
     vector_angulos = pinv(B) * P  # Resolviendo el sistema de ecuaciones B * θ = P
     insert!(vector_angulos, 1, 0.0)  # Se agrega el nodo de referencia con ángulo 0
     return vector_angulos
 end
 
-"""
-Función para calcular los flujos de potencia en cada línea del sistema  
-usando el modelo de flujo de potencia DC.
-"""
+
 function flujo_dc(lines, nodes, c)
+    """
+    Función para calcular los flujos de potencia en cada línea del sistema  
+    usando el modelo de flujo de potencia DC.
+
+    Entradas:
+    - lines: DataFrame con los datos de las líneas de transmisión.
+    - nodes: DataFrame con los datos de los nodos.
+    - vector_ang::Vector{Float64}: Vector de ángulos nodales.
+    
+    Salida:
+    - P_flujos::Vector{Float64}: Vector con los flujos de potencia por línea.
+    
+    """
     num_nodos = nrow(nodes)  # Número total de nodos
     num_lineas = nrow(lines)  # Número total de líneas
     P_flujos = zeros(num_lineas)  # Vector para almacenar los flujos calculados
@@ -99,19 +130,28 @@ function flujo_dc(lines, nodes, c)
     return P_flujos
 end
 
-"""
-Función auxiliar para eliminar una fila de un DataFrame.
-"""
+
 function eliminar_fila(df::DataFrame, fila_a_eliminar::Int)
+    """
+    Función auxiliar para eliminar una fila de un DataFrame.
+    """
     df_filtrado = df[1:end .!= fila_a_eliminar, :]  # Se excluye la fila especificada
     return df_filtrado
 end
 
-"""
-Función principal para realizar el análisis de contingencias.  
-Se eliminan líneas del sistema una por una, y se recalculan los flujos y ángulos.
-"""
+
 function analisis_contingencias(lines::DataFrame, nodes::DataFrame)
+    """
+    Función principal para realizar el análisis de contingencias.  
+    Se eliminan líneas del sistema una por una, y se recalculan los flujos y ángulos.
+    Entradas:
+    - lines: DataFrame con los datos de las líneas.
+    - nodes: DataFrame con los datos de los nodos.
+    
+    Salidas:
+    - resultados_flujos_potencia::Vector{Vector{Float64}}: Lista de flujos de potencia para cada contingencia.
+    - resultados_angulos::Vector{Vector{Float64}}: Lista de ángulos nodales para cada contingencia.
+    """
     num_lineas = nrow(lines)  # Número total de líneas
     resultados_flujos_potencia = []
     resultados_angulos = []
@@ -138,11 +178,21 @@ function analisis_contingencias(lines::DataFrame, nodes::DataFrame)
     return resultados_flujos_potencia, resultados_angulos
 end
 
-"""
-Función para graficar diagramas de caja y bigotes para los flujos de potencia  
-y los ángulos en cada contingencia analizada.
-"""
 function graficar_cajas_bigotes(flujos, angulos)
+    
+    """
+    Función para graficar diagramas de caja y bigotes de los flujos de potencia y ángulos nodales  
+    en cada contingencia analizada.
+    
+    Entrada:
+    - flujos::Vector{Vector{Float64}}: Lista de vectores con los flujos de potencia en cada contingencia.
+    - angulos::Vector{Vector{Float64}}: Lista de vectores con los ángulos nodales en cada contingencia.
+    
+    Salida:
+    - Muestra dos gráficos de caja y bigotes:
+      1. Distribución de los flujos de potencia por contingencia.
+      2. Distribución de los ángulos nodales por contingencia.
+    """
     
     num_contingencias = length(flujos)  # Número total de contingencias
 
