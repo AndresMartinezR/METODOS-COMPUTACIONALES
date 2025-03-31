@@ -13,6 +13,8 @@ using CSV
 # Función para calcular la matriz de admitancia nodal (Ybus)
 function calcular_ybus(lines, nodes)
     """
+    Funcion para calcular la matriz Ybus considerando los transformadores con taps 
+    
     Entrada:
     - lines: DataFrame que contiene la información de las líneas de transmisión.
     - nodes: DataFrame que contiene la información de los nodos del sistema.
